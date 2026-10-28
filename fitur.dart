@@ -51,11 +51,6 @@ void tampilkanDaftar() {
 
 /// Menu 2: mencatat absensi untuk pertemuan berikutnya.
 void catatAbsensi() {
-  if (daftarMahasiswa.isEmpty) {
-    print('\n=== Catat Absensi ===');
-    print('Belum ada data mahasiswa.');
-    return;
-  }
   final nomor = absensi.length + 1;
   print('\n=== Catat Absensi Pertemuan $nomor ===');
   final Map<String, StatusHadir> data = {};
@@ -149,100 +144,4 @@ void ubahStatus() {
   print(
     'Status ${mhs['nama']} pada pertemuan $nomor diubah menjadi ${statusBaru.name}.',
   );
-}
-
-/// Menu 7 [Sedang]: menampilkan jumlah setiap status per mahasiswa.
-void tampilkanRekap() {
-  final totalPertemuan = absensi.length;
-  print('\n=== Rekap Absensi ($totalPertemuan pertemuan) ===');
-  if (daftarMahasiswa.isEmpty) {
-    print('Belum ada data mahasiswa.');
-    return;
-  }
-
-  for (final mhs in daftarMahasiswa) {
-    final nim = mhs['nim'] as String;
-    var hadir = 0;
-    var izin = 0;
-    var sakit = 0;
-    var alpa = 0;
-
-    for (final pertemuan in absensi.values) {
-      final status = pertemuan[nim];
-      switch (status) {
-        case StatusHadir.hadir:
-          hadir++;
-        case StatusHadir.izin:
-          izin++;
-        case StatusHadir.sakit:
-          sakit++;
-        case StatusHadir.alpa:
-          alpa++;
-        case null:
-          break;
-      }
-    }
-
-    print(
-      '${mhs['nama']} | hadir $hadir | izin $izin | sakit $sakit | alpa $alpa',
-    );
-  }
-}
-
-/// Menu 8 [Sulit]: menampilkan persentase kehadiran setiap mahasiswa.
-void tampilkanPersentase() {
-  print('\n=== Persentase Kehadiran ===');
-  if (daftarMahasiswa.isEmpty) {
-    print('Belum ada data mahasiswa.');
-    return;
-  }
-
-  final totalPertemuan = absensi.length;
-  if (totalPertemuan == 0) {
-    print('Belum ada pertemuan.');
-    return;
-  }
-
-  for (final mhs in daftarMahasiswa) {
-    final nim = mhs['nim'] as String;
-    var hadir = 0;
-
-    for (final pertemuan in absensi.values) {
-      if (pertemuan[nim] == StatusHadir.hadir) hadir++;
-    }
-
-    final persentase = (hadir / totalPertemuan) * 100;
-    print(
-      '${mhs['nama']} | $hadir/$totalPertemuan pertemuan | ${persentase.toStringAsFixed(1)}%',
-    );
-  }
-}
-
-/// Menu 9 [Sulit]: menampilkan mahasiswa dengan kehadiran di bawah batas.
-void tampilkanDiBawahBatas() {
-  print('\n=== Kehadiran di Bawah ${batasKehadiran.toStringAsFixed(0)}% ===');
-  if (daftarMahasiswa.isEmpty) {
-    print('Belum ada data mahasiswa.');
-    return;
-  }
-
-  final totalPertemuan = absensi.length;
-  if (totalPertemuan == 0) {
-    print('Belum ada pertemuan.');
-    return;
-  }
-
-  for (final mhs in daftarMahasiswa) {
-    final nim = mhs['nim'] as String;
-    var hadir = 0;
-
-    for (final pertemuan in absensi.values) {
-      if (pertemuan[nim] == StatusHadir.hadir) hadir++;
-    }
-
-    final persentase = (hadir / totalPertemuan) * 100;
-    if (persentase < batasKehadiran) {
-      print('${mhs['nama']} | ${persentase.toStringAsFixed(1)}%');
-    }
-  }
 }
